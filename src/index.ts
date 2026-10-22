@@ -1,6 +1,8 @@
+import express from 'express';
 
-function main(){
-    console.log("Hello, World!");
-}
+const app = express();
+const port = 8080;
 
-main()
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`);
+});
