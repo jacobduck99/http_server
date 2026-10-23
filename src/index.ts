@@ -6,7 +6,7 @@ import { middlewareLogResponses, middlewareMetricsInc } from './api/middleware.j
 const app = express();
 const PORT = 8080;
 
-app.use(middlewareMetricsInc);
+app.use('/app', middlewareMetricsInc);
 app.use(middlewareLogResponses);
 app.use('/app', express.static("./src/app"));
 app.get('/healthz', handlerReadiness);  
