@@ -1,11 +1,12 @@
 import express from "express";
 import { type Request, type Response, type NextFunction } from 'express';
 import { handlerReadiness } from './routes/readiness.js'
-import { middlewareLogResponses } from './api/middleware.js'
+import { middlewareLogResponses, middlewareMetricsInc } from './api/middleware.js'
 
 const app = express();
 const PORT = 8080;
 
+app.use(middlewareMetricsInc);
 app.use(middlewareLogResponses);
 app.use('/app', express.static("./src/app"));
 app.get('/healthz', handlerReadiness);  
