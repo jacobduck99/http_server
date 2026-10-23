@@ -1,7 +1,7 @@
 import express from "express";
 import { type Request, type Response, type NextFunction } from 'express';
 import { handlerReadiness } from './routes/readiness.js'
-import { middlewareLogResponses } from './middleware/middleware.js'
+import { middlewareLogResponses } from './api/middleware.js'
 
 const app = express();
 const PORT = 8080;
