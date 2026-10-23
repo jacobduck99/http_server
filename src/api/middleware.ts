@@ -16,7 +16,6 @@ export function middlewareLogResponses(req: Request, res: Response, next: NextFu
 export function middlewareMetricsInc(req: Request, res: Response, next: NextFunction): void{ 
     res.on("finish", () => {
         config.fileserverHits += 1;
-        console.log(`here is config file hits ${config.fileserverHits}`)
     });
    
         next(); 
