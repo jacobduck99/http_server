@@ -3,9 +3,10 @@ import { type Request, type Response, type NextFunction } from 'express';
 
 export function middlewareLogResponses(req: Request, res: Response, next: NextFunction): void{
     res.on("finish", () => {
-        const statusCode = res.status;
-        console.log("here's status code", statusCode);
-        
-
+        const status = res.statusCode;
+        if (status !== 200){
+            console.log(`[NON-OK] ${req.method} ${req.url} - Status: ${status}`)
+        } 
     });
+        next(); 
 }
