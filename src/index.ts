@@ -9,7 +9,7 @@ const PORT = 8080;
 
 app.use('/app', middlewareMetricsInc);
 app.get('/admin/metrics', handlerGetIncrement);
-app.get('/admin/reset', handlerResetIncrement);
+app.post('/admin/reset', handlerResetIncrement);
 app.use(middlewareLogResponses);
 app.use('/app', express.static("./src/app"));
 app.get('/api/healthz', handlerReadiness);  
