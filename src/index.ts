@@ -8,6 +8,7 @@ import { handler } from './routes/chars.js';
 const app = express();
 const PORT = 8080;
 
+app.use(express.json());
 app.use('/app', middlewareMetricsInc);
 app.get('/admin/metrics', handlerGetIncrement);
 app.post('/admin/reset', handlerResetIncrement);
