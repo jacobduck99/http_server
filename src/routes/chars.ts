@@ -7,32 +7,25 @@ type ChirpParams = {
 type ResponseData = {
   error?: string;
   valid?: boolean;
+  cleanedBody?: string;
 };
 
 export function handler(req: Request, res: Response) {
     const params = req.body;
-    console.log(typeof params.body);
 
     if (typeof params?.body !== "string" || params.body.length > 140) {
-    const respBody: ResponseData = { error: "Chirp is too long" };
-    res.status(400).json(respBody);
+    res.status(400).json({ error: "Chirp is too long" } as ResponseData);
     return;
     }
 
-    const respBody: ResponseData = { valid: true }; 
-    const badWord: string[] = [ "fornax", "kerfuffle", "sharbert" ];
-    
-    if (typeof params?.body === "string" || params.body.length < 140) {
-        console.log("is this working fuck me", params.body);
-        if (params.body.includes("fornax")){
-            console.log(params.body.replace("fornax", "****"))
-            console.log("here's params body", params.body)
-        }
-    console.log(typeof badWord);
-    }
+    const badWords = ["kerfuffle", "sharbert", "fornax"];
 
-    // if ( badWord in paramsString){
-    //     console.log("here is bad word", badWord);
-    // }
-    res.status(200).json(respBody);
+    const cleaned = params.body
+    .split(" ")
+    .map((word: string) =>
+      badWords.includes(word.toLowerCase()) ? "****" : word
+    )
+    .join(" ");
+
+    res.status(200).json({ cleanedBody: cleaned } as ResponseData);
 }
