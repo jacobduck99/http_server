@@ -15,7 +15,10 @@
 // }
 
 class BadRequest extends Error {
-    constructor(message: string){
+    statusCode: number;
+
+    constructor(statusCode: number, message: string){
         super(message);
-    }
+        this.statusCode = statusCode;
+    }    
 }
