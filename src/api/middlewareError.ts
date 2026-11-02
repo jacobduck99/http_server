@@ -1,5 +1,6 @@
 import express from "express";
 import { type Request, type Response, type NextFunction } from 'express';
+import { BadRequest } from './errors.js';
 
 export function errorHandler(
   err: Error,
@@ -7,9 +8,11 @@ export function errorHandler(
   res: Response,
   next: NextFunction,
 ) {
-    console.log("here is err", err);
-  console.error("error, Something went wrong on our end");
-  res.status(500).json({
-    error: "Something went wrong on our end",
+    if (err instanceof BadRequest){
+        console.log("bad request");
+          res.status(400).json({
+            error: `${err.message}`,
   });
+    }
+  console.error("error, Something went wrong on our end");
 }
