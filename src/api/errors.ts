@@ -14,7 +14,7 @@
 //     }
 // }
 
-class BadRequest extends Error {
+export class BadRequest extends Error {
     statusCode: number;
 
     constructor(statusCode: number, message: string){
@@ -22,3 +22,4 @@ class BadRequest extends Error {
         this.statusCode = statusCode;
     }    
 }
+

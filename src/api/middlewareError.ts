@@ -7,6 +7,7 @@ export function errorHandler(
   res: Response,
   next: NextFunction,
 ) {
+    console.log("here is err", err);
   console.error("error, Something went wrong on our end");
   res.status(500).json({
     error: "Something went wrong on our end",

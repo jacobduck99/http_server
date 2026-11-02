@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { BadRequest } from '../api/errors.js';
 
 type ChirpParams = {
   body: string;
@@ -14,7 +15,7 @@ export async function handlerChirpsValidate(req: Request, res: Response) {
     const params = req.body;
 
     if (typeof params?.body !== "string" || params.body.length > 140) {
-    throw new Error('chirp is too long!');
+    throw new BadRequest(400, 'chirp is too long. Max length is 140');
     return;
     }
 
