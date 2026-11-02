@@ -15,7 +15,7 @@ export async function handlerChirpsValidate(req: Request, res: Response) {
     const params = req.body;
 
     if (typeof params?.body !== "string" || params.body.length > 140) {
-    throw new BadRequest('chirp is too long. Max length is 140', 400);
+    throw new BadRequest('Chirp is too long. Max length is 140', 400);
     return;
     }
 
