@@ -4,6 +4,7 @@ import { handlerReadiness } from './routes/readiness.js'
 import { handlerGetIncrement, handlerResetIncrement } from './routes/incrementResponse.js';
 import { middlewareLogResponses, middlewareMetricsInc } from './api/middleware.js'
 import { handlerChirpsValidate } from './routes/validateChirps.js';
+import { handlerCreateUser } from './routes/users.js';
 import { errorHandler } from './api/middlewareError.js';
 
 const app = express();
@@ -17,6 +18,7 @@ app.use(middlewareLogResponses);
 app.use('/app', express.static("./src/app"));
 app.get('/api/healthz', handlerReadiness);  
 app.post('/api/validate_chirp', handlerChirpsValidate);
+app.post('/api/users', handlerCreateUser);
 app.use(errorHandler);
 
 app.listen(PORT, () => {
