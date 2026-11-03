@@ -11,7 +11,7 @@ type ResponseData = {
   cleanedBody?: string;
 };
 
-export async function handlerChirpsValidate(req: Request, res: Response) {
+export async function handlerChirp(req: Request, res: Response){
     const params = req.body;
 
     if (typeof params?.body !== "string" || params.body.length > 140) {

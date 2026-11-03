@@ -7,7 +7,6 @@ export async function handlerCreateUser(req: Request, res: Response){
     const params = req.body;
     const newUser = await createUser(params)
 
-    // if (typeof params?.body !== "string") {}
     res.status(201).json(newUser)
 }
 
