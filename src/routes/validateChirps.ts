@@ -41,4 +41,9 @@ export async function handlerGetAllChirps(req: Request, res: Response){
     res.status(200).json(allChirps);
 }
 
+export async function getChirpById(req: Request, res: Response){
+    const path = req.params.chirpId;
+    console.log("path", path);
+}
+
 
