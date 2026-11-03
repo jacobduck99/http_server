@@ -19,6 +19,7 @@ export async function deleteAllUsers() {
 export async function createUserChirp(body: string, userId: string) {
     const [result] = await db
     .insert(chirps)
-    .values({body: body, user_id: userId}).returning(); 
-    return result
+    .values({ body, userId })
+    .returning();
+    return result;
 }

@@ -19,7 +19,7 @@ export const chirps = pgTable("chirps", {
     .defaultNow()
     .$onUpdate(() => new Date()),
     body: text("body").notNull(), 
-    user_id: uuid("user_id").references(() => users.id, { onDelete: "cascade"}),
+    userId: uuid("user_id").references(() => users.id, { onDelete: "cascade"}),
 })
 
 export type NewUser = typeof users.$inferInsert;

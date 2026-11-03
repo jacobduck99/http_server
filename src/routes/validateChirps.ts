@@ -20,7 +20,7 @@ export async function handlerChirp(req: Request, res: Response){
     return;
     }
         
-    const userId = req.body.userid;
+    const userid = req.body.userid;
 
     const badWords = ["kerfuffle", "sharbert", "fornax"];
 
@@ -32,8 +32,8 @@ export async function handlerChirp(req: Request, res: Response){
     .join(" ");
 
 
-    const userChirp = await createUserChirp(cleaned, userId);
+    const userChirp = await createUserChirp(cleaned, userid);
     console.log("userChirp", userChirp);
 
-    res.status(201).json({ userChirp } );
+    res.status(201).json(userChirp);
 }
