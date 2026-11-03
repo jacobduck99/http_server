@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { BadRequest } from '../api/errors.js';
+import { createUserChirp } from '../db/queries/users.js';
 
 type ChirpParams = {
   body: string;
@@ -19,9 +20,9 @@ export async function handlerChirp(req: Request, res: Response){
     throw new BadRequest('Chirp is too long. Max length is 140', 400);
     return;
     }
-
+        
     const userId = req.body.userid;
-    console.log("userId", userId);
+    const userChirp = await createUserChirp(params.body, userId);
 
     const badWords = ["kerfuffle", "sharbert", "fornax"];
 
@@ -32,7 +33,5 @@ export async function handlerChirp(req: Request, res: Response){
     )
     .join(" ");
 
-
-
-    res.status(200).json({ cleanedBody: cleaned } as ResponseData);
+    res.status(201).json({ userChirp } );
 }
