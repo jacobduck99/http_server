@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { BadRequest } from '../api/errors.js';
-import { createUserChirp } from '../db/queries/users.js';
+import { createUserChirp } from '../db/queries/chirps.js';
 
 type ChirpParams = {
   body: string;
