@@ -3,9 +3,8 @@ import { type Request, type Response, type NextFunction } from 'express';
 import { handlerReadiness } from './routes/readiness.js'
 import { handlerGetIncrement, handlerResetIncrement } from './routes/incrementResponse.js';
 import { middlewareLogResponses, middlewareMetricsInc } from './api/middleware.js'
-import { handlerChirp } from './routes/validateChirps.js';
+import { handlerChirp, handlerGetAllChirps } from './routes/validateChirps.js';
 import { handlerCreateUser, handlerDeleteAllUsers } from './routes/users.js';
-import { getAllChirps } from './db/queries/chirps.js';
 import { errorHandler } from './api/middlewareError.js';
 
 const app = express();
@@ -18,7 +17,7 @@ app.post('/admin/reset', handlerDeleteAllUsers);
 app.use(middlewareLogResponses);
 app.use('/app', express.static("./src/app"));
 app.get('/api/healthz', handlerReadiness);  
-app.get('/api/chirps', getAllChirps);  
+app.get('/api/chirps', handlerGetAllChirps);  
 app.post('/api/chirps', handlerChirp);
 app.post('/api/users', handlerCreateUser);
 app.use(errorHandler);
