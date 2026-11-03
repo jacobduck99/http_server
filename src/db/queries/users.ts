@@ -2,10 +2,10 @@
 import { db } from "../index.js";
 import { NewUser, users, chirps } from "../schema.js";
 
-export async function createUser(user: NewUser) {
+export async function createUser(user: NewUser, password: string) {
   const [result] = await db
     .insert(users)
-    .values(user)
+    .values(user, password)
     .onConflictDoNothing()
     .returning();
   return result;
@@ -16,10 +16,3 @@ export async function deleteAllUsers() {
     return deleteUsers;
 }
 
-export async function createUserChirp(body: string, userId: string) {
-    const [result] = await db
-    .insert(chirps)
-    .values({ body, userId })
-    .returning();
-    return result;
-}

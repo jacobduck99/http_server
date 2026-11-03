@@ -8,7 +8,7 @@ export async function handlerCreateUser(req: Request, res: Response){
     const params = req.body;
     const password = params.password;
     const hashedPw = await hashPassword(password);
-    const newUser = await createUser(params)
+    const newUser = await createUser(params, hashedPw);
     console.log("params", params);
 
 
