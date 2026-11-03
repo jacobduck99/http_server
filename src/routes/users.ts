@@ -6,13 +6,13 @@ import { hashPassword } from '../auth/auth.js';
 
 export async function handlerCreateUser(req: Request, res: Response){
     const params = req.body;
-    const password = params.password;
-    const hashedPw = await hashPassword(password);
-    const newUser = await createUser(params, hashedPw);
-    console.log("params", params);
-
-
-    res.status(201).json(newUser)
+    const hashedPw = await hashPassword(params.password);
+    const newUser = await createUser({
+        email: params.email,
+        hashedPassword: hashedPw,
+    });
+    const { hashedPassword, ...user } = newUser;
+    res.status(201).json(user);
 }
 
 export async function handlerDeleteAllUsers(req: Request, res: Response){
