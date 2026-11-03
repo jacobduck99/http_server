@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createUser } from '../db/queries/users.js';
+import { createUser, deleteAllUsers } from '../db/queries/users.js';
 
 export async function handlerCreateUser(req: Request, res: Response){
     const params = req.body;
@@ -12,4 +12,6 @@ export async function handlerCreateUser(req: Request, res: Response){
     res.status(200).json({ newUser })
 }
 
-// export async function handlerDeleteAllUsers()
+export async function handlerDeleteAllUsers(){
+    const deleteUsers = await deleteAllUsers();
+}
