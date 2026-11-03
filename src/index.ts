@@ -18,7 +18,7 @@ app.use(middlewareLogResponses);
 app.use('/app', express.static("./src/app"));
 app.get('/api/healthz', handlerReadiness);  
 app.get('/api/chirps', handlerGetAllChirps);  
-app.get('/api/chirps/:chirpId', handlerGetChirpById) // need to update this
+app.get('/api/chirps/:chirpId', handlerGetChirpById) 
 app.post('/api/chirps', handlerChirp);
 app.post('/api/users', handlerCreateUser);
 app.use(errorHandler);
