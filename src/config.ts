@@ -6,6 +6,7 @@ loadEnvFile();
 type APIConfig = {
     fileserverHits: number;
     port: number,
+    platform: string,
 }
 
 const migrationConfig: MigrationConfig = {
@@ -29,6 +30,7 @@ export const config = {
     api : {
         fileserverHits: 0,
         port: Number(envOrThrow("PORT")),    
+        platform: envOrThrow("PLATFORM"),
     },
     db : {
         url: envOrThrow("DB_URL"),    
