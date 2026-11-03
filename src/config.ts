@@ -14,7 +14,7 @@ const migrationConfig: MigrationConfig = {
 
 type DBConfig = {
     url: string;
-    migrationsFolder: MigrationConfig;
+    migrationConfig: MigrationConfig;
 }
 
 function envOrThrow(key: string): string {
@@ -31,7 +31,7 @@ export const config = {
         port: Number(envOrThrow("PORT")),    
     },
     db : {
-        url: config.db.url,    
-        migrationsConfig: config.db.migrationConfig, 
+        url: envOrThrow("DB_URL"),    
+        migrationConfig: migrationConfig, 
 }
 }
