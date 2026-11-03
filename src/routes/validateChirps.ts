@@ -14,7 +14,6 @@ type ResponseData = {
 
 export async function handlerChirp(req: Request, res: Response){
     const params = req.body;
-    console.log("params", params);
 
     if (typeof params?.body !== "string" || params.body.length > 140) {
     throw new BadRequest('Chirp is too long. Max length is 140', 400);
@@ -22,7 +21,6 @@ export async function handlerChirp(req: Request, res: Response){
     }
         
     const userId = req.body.userid;
-    const userChirp = await createUserChirp(params.body, userId);
 
     const badWords = ["kerfuffle", "sharbert", "fornax"];
 
@@ -32,6 +30,10 @@ export async function handlerChirp(req: Request, res: Response){
       badWords.includes(word.toLowerCase()) ? "****" : word
     )
     .join(" ");
+
+
+    const userChirp = await createUserChirp(cleaned, userId);
+    console.log("userChirp", userChirp);
 
     res.status(201).json({ userChirp } );
 }
