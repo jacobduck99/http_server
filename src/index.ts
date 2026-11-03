@@ -5,7 +5,7 @@ import { handlerGetIncrement, handlerResetIncrement } from './routes/incrementRe
 import { middlewareLogResponses, middlewareMetricsInc } from './api/middleware.js'
 import { handlerChirp, handlerGetAllChirps, handlerGetChirpById } from './routes/validateChirps.js';
 import { handlerCreateUser, handlerDeleteAllUsers } from './routes/users.js';
-import { errorHandler } from './api/middlewareError.js';
+import { errorHandler } from './api/middlewareError.js'
 
 const app = express();
 const PORT = 8080;

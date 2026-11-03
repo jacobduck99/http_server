@@ -6,6 +6,7 @@ import { Forbidden } from '../api/errors.js';
 export async function handlerCreateUser(req: Request, res: Response){
     const params = req.body;
     const newUser = await createUser(params)
+    console.log("params", params);
 
     res.status(201).json(newUser)
 }

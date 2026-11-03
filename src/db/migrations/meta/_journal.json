@@ -15,6 +15,13 @@
       "when": 1793746814761,
       "tag": "0001_redundant_eddie_brock",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793747666182,
+      "tag": "0002_sleepy_dracula",
+      "breakpoints": true
     }
   ]
 }
