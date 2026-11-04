@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { createUser, deleteAllUsers, getUserEmail } from '../db/queries/users.js';
 import { config } from '../config.js';
 import { Forbidden, Unauthorized } from '../api/errors.js';
-import { hashPassword, checkPasswordHash, makeJWT } from '../auth/auth.js';
+import { hashPassword, checkPasswordHash, makeJWT, makeRefreshToken } from '../auth/auth.js';
 
 export async function handlerCreateUser(req: Request, res: Response){
     const params = req.body;
@@ -44,7 +44,8 @@ export async function handlerLoginUser(req: Request, res: Response){
     if (expiresIn > oneHour) {
         expiresIn = oneHour;
     }
-
+    
+    const refreshToken = makeRefreshToken();
     const secret = config.api.jwtToken;
     const jwtToken = makeJWT(user.id, expiresIn, secret);
     res.status(200).json({ ...user, token: jwtToken });

@@ -1,4 +1,5 @@
 import { hash, verify } from "argon2";
+import { randomBytes } from 'node:crypto';
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import type { JwtPayload } from "jsonwebtoken";
@@ -12,6 +13,11 @@ export async function hashPassword(password: string): Promise<string>{
 export async function checkPasswordHash(password: string, hash: string): Promise<boolean>{
     const checkPw = await verify(hash, password);
     return checkPw;
+}
+
+export function makeRefreshToken(){
+    const buff = randomBytes(32).toString('hex');
+    console.log("buff", buff);
 }
 
 type payload = Pick<JwtPayload, "iss" | "sub" | "iat" | "exp">;
