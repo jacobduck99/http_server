@@ -16,13 +16,13 @@ type payload = Pick<JwtPayload, "iss" | "sub" | "iat" | "exp">;
 
 function makeJWT(userID: string, expiresIn: number, secret: string): string{
     const issueDateToken = Math.floor(Date.now() / 1000);
-    console.log("issuedate", issueDateToken);
     const jwtPayload: payload = {
         "iss": "chirpy",
         "sub": userID,
         "iat": issueDateToken, 
         "exp": issueDateToken + expiresIn,
     } 
-    const token = jwt.sign(userID, secret, expiresIn);
-    return jwtPayload.sub as any;
+
+    const token = jwt.sign(jwtPayload, secret);
+    return token;
 };
