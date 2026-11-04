@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { createUser, deleteAllUsers, getUserEmail } from '../db/queries/users.js';
 import { config } from '../config.js';
-import { Forbidden } from '../api/errors.js';
+import { Forbidden, Unauthorized } from '../api/errors.js';
 import { hashPassword, checkPasswordHash } from '../auth/auth.js';
 
 export async function handlerCreateUser(req: Request, res: Response){
@@ -29,12 +29,14 @@ export async function handlerDeleteAllUsers(req: Request, res: Response){
 export async function handlerLoginUser(req: Request, res: Response){
     const params = req.body;
     const { email, password } = params;
-    console.log("params", params);
     const userEmail = await getUserEmail(email);
-    const { hashedPassword } = userEmail;
-    console.log("hased p", hashedPassword);
+    if (userEmail === undefined){
+        throw new Unauthorized("incorrect email or password", 401);
+    }
+    const { hashedPassword, ...user } = userEmail;
     const verifyPw = await checkPasswordHash(password, hashedPassword);
-    console.log("vp", verifyPw)
-    console.log("userEmail", userEmail);
-
+    if (verifyPw === false){
+        throw new Unauthorized("incorrect email or password", 401);
+    }
+    res.status(200).json(user);
 }
