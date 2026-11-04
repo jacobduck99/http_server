@@ -17,7 +17,7 @@ export async function checkPasswordHash(password: string, hash: string): Promise
 
 export function makeRefreshToken(){
     const buff = randomBytes(32).toString('hex');
-    console.log("buff", buff);
+    return buff;
 }
 
 type payload = Pick<JwtPayload, "iss" | "sub" | "iat" | "exp">;

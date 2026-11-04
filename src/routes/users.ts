@@ -3,6 +3,7 @@ import { createUser, deleteAllUsers, getUserEmail } from '../db/queries/users.js
 import { config } from '../config.js';
 import { Forbidden, Unauthorized } from '../api/errors.js';
 import { hashPassword, checkPasswordHash, makeJWT, makeRefreshToken } from '../auth/auth.js';
+import { createUserRefreshToken } from '../db/queries/refreshTokens.js';
 
 export async function handlerCreateUser(req: Request, res: Response){
     const params = req.body;
@@ -28,7 +29,7 @@ export async function handlerDeleteAllUsers(req: Request, res: Response){
 
 export async function handlerLoginUser(req: Request, res: Response){
     const params = req.body;
-    const { email, password, expiresInSeconds } = params;
+    const { email, password } = params;
     const userEmail = await getUserEmail(email);
     if (userEmail === undefined){
         throw new Unauthorized("incorrect email or password", 401);
@@ -40,13 +41,13 @@ export async function handlerLoginUser(req: Request, res: Response){
     }
 
     const oneHour = 60 * 60;
-    let expiresIn = expiresInSeconds ?? oneHour;
-    if (expiresIn > oneHour) {
-        expiresIn = oneHour;
-    }
-    
-    const refreshToken = makeRefreshToken();
     const secret = config.api.jwtToken;
-    const jwtToken = makeJWT(user.id, expiresIn, secret);
-    res.status(200).json({ ...user, token: jwtToken });
+    const jwtToken = makeJWT(user.id, oneHour, secret);
+
+    const sixtyDays = 60 * 24 * 60 * 60 * 1000;
+    const refreshExpires = new Date(Date.now() + sixtyDays);
+    const refreshToken = makeRefreshToken();
+    await createUserRefreshToken(refreshToken, user.id, refreshExpires);
+
+    res.status(200).json({ ...user, token: jwtToken, refreshToken: refreshToken });
 }
