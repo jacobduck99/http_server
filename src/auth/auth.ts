@@ -40,3 +40,9 @@ export function validateJWT(tokenString: string, secret: string): string {
     }
     return decoded.sub;
 }
+
+// export function extractBearerToken(authorization: string | undefined): string{
+//     const params = req.body;
+//     console.log("params", params)
+//     // const { Bearer: bearer } = params;
+// };

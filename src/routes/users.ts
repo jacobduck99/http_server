@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { createUser, deleteAllUsers, getUserEmail } from '../db/queries/users.js';
 import { config } from '../config.js';
 import { Forbidden, Unauthorized } from '../api/errors.js';
-import { hashPassword, checkPasswordHash } from '../auth/auth.js';
+import { hashPassword, checkPasswordHash, makeJWT } from '../auth/auth.js';
 
 export async function handlerCreateUser(req: Request, res: Response){
     const params = req.body;
@@ -28,7 +28,10 @@ export async function handlerDeleteAllUsers(req: Request, res: Response){
 
 export async function handlerLoginUser(req: Request, res: Response){
     const params = req.body;
-    const { email, password } = params;
+    const header = req.get('Authorization');
+    console.log("header", header);
+    //change this back
+    const { email, password, id } = params;
     const userEmail = await getUserEmail(email);
     if (userEmail === undefined){
         throw new Unauthorized("incorrect email or password", 401);
@@ -38,5 +41,8 @@ export async function handlerLoginUser(req: Request, res: Response){
     if (verifyPw === false){
         throw new Unauthorized("incorrect email or password", 401);
     }
+    const secret = 'secret';
+    const jwtToken = makeJWT(id, 60 * 60, secret);
+    console.log("jwt token", jwtToken);
     res.status(200).json(user);
 }
