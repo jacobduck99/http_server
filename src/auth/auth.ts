@@ -51,3 +51,11 @@ export function extractBearerToken(authorization: string | undefined): string {
     }
     return token;
 }
+
+function getBearerToken(req: Request): string{
+    const header = req.get('Authorization');
+    const extractToken = extractBearerToken(header);
+    return extractToken;
+};
+
+

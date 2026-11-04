@@ -28,6 +28,7 @@ export async function handlerDeleteAllUsers(req: Request, res: Response){
 
 export async function handlerLoginUser(req: Request, res: Response){
     const params = req.body;
+    //might need to change 
     const { email, password, id } = params;
     const userEmail = await getUserEmail(email);
     if (userEmail === undefined){
@@ -38,9 +39,12 @@ export async function handlerLoginUser(req: Request, res: Response){
     if (verifyPw === false){
         throw new Unauthorized("incorrect email or password", 401);
     }
-    const header = req.get('Authorization') as any;
-    const getBearerToken = extractBearerToken(header);
-    console.log("get bearer", getBearerToken);
+    
+    //might need to change 
+    // const header = req.get('Authorization') as any;
+    // const getBearerToken = extractBearerToken(header);
+    //might need to change 
+    // console.log("get bearer", getBearerToken);
     const secret = 'secret';
     const jwtToken = makeJWT(id, 60 * 60, secret);
     console.log("jwt token", jwtToken);
