@@ -7,6 +7,7 @@ type APIConfig = {
     fileserverHits: number;
     port: number,
     platform: string,
+    jwt: string,
 }
 
 const migrationConfig: MigrationConfig = {
@@ -31,6 +32,7 @@ export const config = {
         fileserverHits: 0,
         port: Number(envOrThrow("PORT")),    
         platform: envOrThrow("PLATFORM"),
+        jwtToken: envOrThrow("JWT_SECRET"),
     },
     db : {
         url: envOrThrow("DB_URL"),    
