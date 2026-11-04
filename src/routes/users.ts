@@ -28,10 +28,13 @@ export async function handlerDeleteAllUsers(req: Request, res: Response){
 
 export async function handlerLoginUser(req: Request, res: Response){
     const params = req.body;
-    const { email } = params;
+    const { email, password } = params;
     console.log("params", params);
-    console.log("email", email);
     const userEmail = await getUserEmail(email);
+    const { hashedPassword } = userEmail;
+    console.log("hased p", hashedPassword);
+    const verifyPw = await checkPasswordHash(password, hashedPassword);
+    console.log("vp", verifyPw)
     console.log("userEmail", userEmail);
 
 }
