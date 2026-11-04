@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeAll } from "vitest";
-import { makeJWT, validateJWT, hashPassword, checkPasswordHash } from "./auth.js";
+import { makeJWT, validateJWT, hashPassword, checkPasswordHash, extractBearerToken } from "./auth.js";
+import { BadRequest } from '../api/errors.js';
 
 describe("Password Hashing", () => {
     const password1 = "correctPassword123!";
@@ -55,5 +56,33 @@ describe("Password Hashing", () => {
 
     it("should return an argon2 encoded hash", () => {
         expect(hash1.startsWith("$argon2")).toBe(true);
+    });
+});
+
+describe("extractBearerToken", () => {
+    it("should return the token from a valid header", () => {
+        const token = extractBearerToken("Bearer abc123");
+        expect(token).toBe("abc123");
+    });
+
+    it("should handle extra whitespace around the header", () => {
+        const token = extractBearerToken("  Bearer abc123  ");
+        expect(token).toBe("abc123");
+    });
+
+    it("should throw BadRequest when the header is undefined", () => {
+        expect(() => extractBearerToken(undefined)).toThrow(BadRequest);
+    });
+
+    it("should throw BadRequest when the header is empty", () => {
+        expect(() => extractBearerToken("")).toThrow(BadRequest);
+    });
+
+    it("should throw BadRequest when the scheme isn't Bearer", () => {
+        expect(() => extractBearerToken("Basic abc123")).toThrow(BadRequest);
+    });
+
+    it("should throw BadRequest when the token is missing", () => {
+        expect(() => extractBearerToken("Bearer")).toThrow(BadRequest);
     });
 });

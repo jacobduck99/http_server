@@ -1,7 +1,7 @@
 import { hash, verify } from "argon2";
 import jwt from "jsonwebtoken";
 import type { JwtPayload } from "jsonwebtoken";
-import { Unauthorized } from '../api/errors.js';
+import { Unauthorized, BadRequest } from '../api/errors.js';
 
 export async function hashPassword(password: string): Promise<string>{
     const hashPw = await hash(password);
@@ -41,8 +41,13 @@ export function validateJWT(tokenString: string, secret: string): string {
     return decoded.sub;
 }
 
-// export function extractBearerToken(authorization: string | undefined): string{
-//     const params = req.body;
-//     console.log("params", params)
-//     // const { Bearer: bearer } = params;
-// };
+export function extractBearerToken(authorization: string | undefined): string {
+    if (!authorization) {
+        throw new BadRequest("missing authorization header", 400);
+    }
+    const [scheme, token] = authorization.trim().split(" ");
+    if (scheme !== "Bearer" || !token) {
+        throw new BadRequest("isn't Bearer or token empty", 400);
+    }
+    return token;
+}
