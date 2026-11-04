@@ -5,6 +5,7 @@ import { handlerGetIncrement, handlerResetIncrement } from './routes/incrementRe
 import { middlewareLogResponses, middlewareMetricsInc } from './api/middleware.js'
 import { handlerChirp, handlerGetAllChirps, handlerGetChirpById } from './routes/validateChirps.js';
 import { handlerCreateUser, handlerDeleteAllUsers, handlerLoginUser } from './routes/users.js';
+import { handlerCheckToken } from './routes/refresh.js';
 import { errorHandler } from './api/middlewareError.js'
 
 const app = express();
@@ -22,6 +23,7 @@ app.get('/api/chirps/:chirpId', handlerGetChirpById)
 app.post('/api/chirps', handlerChirp);
 app.post('/api/users', handlerCreateUser);
 app.post('/api/login', handlerLoginUser);
+app.post('/api/refresh', handlerCheckToken); 
 app.use(errorHandler);
 
 app.listen(PORT, () => {
