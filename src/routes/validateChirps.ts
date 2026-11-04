@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { BadRequest } from '../api/errors.js';
 import { createUserChirp, getAllChirps, getChirpById } from '../db/queries/chirps.js';
 import { NotFound } from '../api/errors.js';
+import { extractBearerToken, validateJWT } from '../auth/auth.js';
+import { config } from '../config.js';
 
 type ChirpParams = {
   body: string;
@@ -30,8 +32,11 @@ export async function handlerChirp(req: Request, res: Response){
     )
     .join(" ");
 
-
-    const userChirp = await createUserChirp(cleaned, params.userId);
+    const header = req.get('Authorization') 
+    const getToken = extractBearerToken(header); 
+    const secret = config.api.jwtToken;
+    const userId = validateJWT(getToken, secret);
+    const userChirp = await createUserChirp(cleaned, userId);
     console.log("userChirp", userChirp);
 
     res.status(201).json(userChirp);

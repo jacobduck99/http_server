@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { createUser, deleteAllUsers, getUserEmail } from '../db/queries/users.js';
 import { config } from '../config.js';
 import { Forbidden, Unauthorized } from '../api/errors.js';
-import { hashPassword, checkPasswordHash, makeJWT, extractBearerToken } from '../auth/auth.js';
+import { hashPassword, checkPasswordHash, makeJWT } from '../auth/auth.js';
 
 export async function handlerCreateUser(req: Request, res: Response){
     const params = req.body;

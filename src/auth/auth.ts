@@ -1,4 +1,5 @@
 import { hash, verify } from "argon2";
+import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import type { JwtPayload } from "jsonwebtoken";
 import { Unauthorized, BadRequest } from '../api/errors.js';
