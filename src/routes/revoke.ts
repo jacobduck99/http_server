@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
 import { revokeRefreshToken } from '../db/queries/refreshTokens.js';
+import { extractBearerToken } from '../auth/auth.js';
  
 export async function handlerRevokeRefreshToken(req: Request, res: Response){
-    const header = req.get('Authorization') as any;
-    const token = header.split(" ")[1];
+    const header = req.get('Authorization');
+    const token = extractBearerToken(header);
     const revokeToken = await revokeRefreshToken(token);
-    res.status(200);
+    res.status(204).end();
 }
