@@ -30,7 +30,7 @@ export async function handlerDeleteAllUsers(req: Request, res: Response){
 export async function handlerLoginUser(req: Request, res: Response){
     const params = req.body;
     const { email, password } = params;
-    const userEmail = await getUserEmail(email);
+    const userEmail = await getUser(email);
     if (userEmail === undefined){
         throw new Unauthorized("incorrect email or password", 401);
     }
@@ -53,16 +53,19 @@ export async function handlerLoginUser(req: Request, res: Response){
 }
 
 export async function handlerUpdateUserLogin(req: Request, res: Response){
-    const token = extractBearerToken('Authorization');
+    const header = req.get('Authorization')
+    const token = extractBearerToken(header);
     const params = req.body;
     const { email, password } = params;
+    const validateToken = validateJWT(token, config.api.jwtToken);
+    const { sub } = validateToken;
     const hashedPw = await hashPassword(password);
-    const updateUserInfo = await updateUser(email, hashedPw);
-    const { hashedPassword, ...updateUserInfo} = updateUserInfo;
+    const updateUserInfo = await updateUser(email, hashedPw, sub) as any;
+    const { hashedPassword, ...updatedUser } = updateUserInfo;
 
     if (token === undefined){
         throw new Unauthorized('access token malformed or missing', 401)
-    } res.status(200).json( updateUserInfo );
+    } res.status(200).json( updatedUser );
 
     
 }

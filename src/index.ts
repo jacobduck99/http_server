@@ -4,7 +4,7 @@ import { handlerReadiness } from './routes/readiness.js'
 import { handlerGetIncrement, handlerResetIncrement } from './routes/incrementResponse.js';
 import { middlewareLogResponses, middlewareMetricsInc } from './api/middleware.js'
 import { handlerChirp, handlerGetAllChirps, handlerGetChirpById } from './routes/validateChirps.js';
-import { handlerCreateUser, handlerDeleteAllUsers, handlerLoginUser } from './routes/users.js';
+import { handlerCreateUser, handlerDeleteAllUsers, handlerLoginUser, handlerUpdateUserLogin } from './routes/users.js';
 import { handlerCheckToken } from './routes/refresh.js';
 import { handlerRevokeRefreshToken } from './routes/revoke.js';
 import { errorHandler } from './api/middlewareError.js'
@@ -27,7 +27,7 @@ app.post('/api/users', handlerCreateUser);
 app.post('/api/login', handlerLoginUser);
 app.post('/api/refresh', handlerCheckToken); 
 app.post('/api/revoke', handlerRevokeRefreshToken);
-app.put('/api/users', ) // put a handler here
+app.put('/api/users', handlerUpdateUserLogin);
 app.use(errorHandler);
 
 app.listen(PORT, () => {
