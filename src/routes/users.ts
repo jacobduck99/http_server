@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { createUser, deleteAllUsers, getUserEmail } from '../db/queries/users.js';
 import { config } from '../config.js';
 import { Forbidden, Unauthorized } from '../api/errors.js';
-import { hashPassword, checkPasswordHash, makeJWT, makeRefreshToken } from '../auth/auth.js';
+import { hashPassword, checkPasswordHash, makeJWT, makeRefreshToken, extractBearerToken } from '../auth/auth.js';
 import { createUserRefreshToken } from '../db/queries/refreshTokens.js';
 
 export async function handlerCreateUser(req: Request, res: Response){
@@ -50,4 +50,13 @@ export async function handlerLoginUser(req: Request, res: Response){
     await createUserRefreshToken(refreshToken, user.id, refreshExpires);
 
     res.status(200).json({ ...user, token: jwtToken, refreshToken: refreshToken });
+}
+
+export async function handlerUpdateUserLogin(req: Request, res: Response){
+    const header = extractBearerToken('Authorization');
+    const params = req.body;
+    const { email, password } = params;
+    const hashedPw = await hashPassword(password);
+
+    
 }

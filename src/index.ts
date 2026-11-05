@@ -27,6 +27,7 @@ app.post('/api/users', handlerCreateUser);
 app.post('/api/login', handlerLoginUser);
 app.post('/api/refresh', handlerCheckToken); 
 app.post('/api/revoke', handlerRevokeRefreshToken);
+app.put('/api/users', ) // put a handler here
 app.use(errorHandler);
 
 app.listen(PORT, () => {
