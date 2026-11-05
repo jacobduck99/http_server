@@ -12,7 +12,11 @@ export async function createUserRefreshToken(token: string, userId: string, expi
 
 export async function checkUserRefreshToken(token: string){
     const [result] = await db
-    .select().from(refresh_tokens)
-    .where(eq(refresh_tokens.token, token))
-    return result; 
+    .select()
+    .from(refresh_tokens)
+    .innerJoin(users, eq(users.id, refresh_tokens.user_id))
+    .where(eq(refresh_tokens.token, token));
+    return result;
 };
+
+
