@@ -50,11 +50,11 @@ export function validateJWT(tokenString: string, secret: string): string {
 
 export function extractBearerToken(authorization: string | undefined): string {
     if (!authorization) {
-        throw new BadRequest("missing authorization header", 400);
+        throw new Unauthorized("missing authorization header", 401);
     }
     const [scheme, token] = authorization.trim().split(" ");
     if (scheme !== "Bearer" || !token) {
-        throw new BadRequest("isn't Bearer or token empty", 400);
+        throw new Unauthorized("isn't Bearer or token empty", 401);
     }
     return token;
 }

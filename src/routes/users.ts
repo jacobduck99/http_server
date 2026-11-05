@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { createUser, deleteAllUsers, getUserEmail, updateUser } from '../db/queries/users.js';
+import { createUser, deleteAllUsers, getUser, updateUser } from '../db/queries/users.js';
 import { config } from '../config.js';
 import { Forbidden, Unauthorized } from '../api/errors.js';
-import { hashPassword, checkPasswordHash, makeJWT, makeRefreshToken, extractBearerToken } from '../auth/auth.js';
+import { hashPassword, checkPasswordHash, makeJWT, makeRefreshToken, extractBearerToken, validateJWT } from '../auth/auth.js';
 import { createUserRefreshToken } from '../db/queries/refreshTokens.js';
 
 export async function handlerCreateUser(req: Request, res: Response){
@@ -52,20 +52,22 @@ export async function handlerLoginUser(req: Request, res: Response){
     res.status(200).json({ ...user, token: jwtToken, refreshToken: refreshToken });
 }
 
-export async function handlerUpdateUserLogin(req: Request, res: Response){
-    const header = req.get('Authorization')
-    const token = extractBearerToken(header);
-    const params = req.body;
-    const { email, password } = params;
-    const validateToken = validateJWT(token, config.api.jwtToken);
-    const { sub } = validateToken;
-    const hashedPw = await hashPassword(password);
-    const updateUserInfo = await updateUser(email, hashedPw, sub) as any;
-    const { hashedPassword, ...updatedUser } = updateUserInfo;
+export async function handlerUpdateUserLogin(req: Request, res: Response) {
+      const header = req.get("Authorization");
+      const token = extractBearerToken(header);
+      if (token === undefined) {
+        throw new Unauthorized("access token malformed or missing", 401);
+      }
 
-    if (token === undefined){
-        throw new Unauthorized('access token malformed or missing', 401)
-    } res.status(200).json( updatedUser );
+      const userId = validateJWT(token, config.api.jwtToken);
+      const { email, password } = req.body;
+      const hashedPw = await hashPassword(password);
 
-    
+      const user = await updateUser(userId, email, hashedPw);
+      if (!user) {
+        throw new Unauthorized("user not found", 401);
+      }
+
+      const { hashedPassword, ...updatedUser } = user;
+      res.status(200).json(updatedUser);
 }
