@@ -53,10 +53,16 @@ export async function handlerLoginUser(req: Request, res: Response){
 }
 
 export async function handlerUpdateUserLogin(req: Request, res: Response){
-    const header = extractBearerToken('Authorization');
+    const token = extractBearerToken('Authorization');
     const params = req.body;
     const { email, password } = params;
     const hashedPw = await hashPassword(password);
+    const updateUserInfo = await updateUser(email, hashedPw);
+    const { hashedPassword, ...updateUserInfo} = updateUserInfo;
+
+    if (token === undefined){
+        throw new Unauthorized('access token malformed or missing', 401)
+    } res.status(200).json( updateUserInfo );
 
     
 }
