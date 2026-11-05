@@ -19,4 +19,12 @@ export async function checkUserRefreshToken(token: string){
     return result;
 };
 
+export async function revokeRefreshToken(token: string, revokedAt: Date){
+    const [result] = await db
+    .update(refresh_tokens)
+    .set({ revoked_at: revokedAt })
+    .where(eq(refresh_tokens.token, token))
+    return result; 
+}
+
 
