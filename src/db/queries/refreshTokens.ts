@@ -1,6 +1,6 @@
 import { db } from "../index.js";
 import { eq } from 'drizzle-orm';
-import { refresh_tokens } from "../schema.js";
+import { refresh_tokens, users } from "../schema.js";
 
 export async function createUserRefreshToken(token: string, userId: string, expiresAt: Date){
     const [result] = await db
@@ -19,10 +19,10 @@ export async function checkUserRefreshToken(token: string){
     return result;
 };
 
-export async function revokeRefreshToken(token: string, revokedAt: Date){
+export async function revokeRefreshToken(token: string){
     const [result] = await db
     .update(refresh_tokens)
-    .set({ revoked_at: revokedAt })
+    .set({ revoked_at: new Date() })
     .where(eq(refresh_tokens.token, token))
     return result; 
 }
