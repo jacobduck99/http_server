@@ -8,6 +8,7 @@ type APIConfig = {
     port: number,
     platform: string,
     jwt: string,
+    polka: string,
 }
 
 const migrationConfig: MigrationConfig = {
@@ -33,6 +34,7 @@ export const config = {
         port: Number(envOrThrow("PORT")),    
         platform: envOrThrow("PLATFORM"),
         jwtToken: envOrThrow("JWT_SECRET"),
+        polka: envOrThrow("POLKA_KEY"),
     },
     db : {
         url: envOrThrow("DB_URL"),    
