@@ -12,6 +12,7 @@ export async function createUser(user: NewUser) {
 }
 
 export async function deleteAllUsers() {
+    await db.delete(chirps);
     const deleteUsers = await db.delete(users);
     return deleteUsers;
 }
