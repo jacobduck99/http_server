@@ -1,5 +1,5 @@
 import { db } from "../index.js";
-import { asc, eq } from 'drizzle-orm';
+import { asc, eq, and } from 'drizzle-orm';
 import { chirps } from "../schema.js";
 
 export async function createUserChirp(body: string, userId: string) {

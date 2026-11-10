@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { BadRequest, NotFound, Forbidden } from '../api/errors.js';
-import { createUserChirp, getAllChirps, getChirpById } from '../db/queries/chirps.js';
-import { NotFound } from '../api/errors.js';
+import { createUserChirp, getAllChirps, getChirpById, deleteChirpById } from '../db/queries/chirps.js';
 import { extractBearerToken, validateJWT, getBearerToken } from '../auth/auth.js';
 import { config } from '../config.js';
 
