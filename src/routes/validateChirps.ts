@@ -44,28 +44,21 @@ export async function handlerChirp(req: Request, res: Response){
 export async function handlerGetAllChirps(req: Request, res: Response) {
     const { authorId, sort } = req.query;
 
-    if (authorId === undefined || sort === undefined) {
-        const allChirps = await getAllChirps();
-        res.status(200).json(allChirps);
-        return;
-    }
-
-    if (sort === 'desc'){
-        const allChirps = await getAllChirps();
-        const reversed = allChirps.toReversed();
-        console.log("here's before reversed", allChirps);
-        console.log("reversed", reversed);
-        res.status(200).json(reversed);
-        return;
-    }
-
-    if (typeof authorId !== "string") {
+    let chirps;
+    if (authorId === undefined) {
+        chirps = await getAllChirps();
+    } else if (typeof authorId === "string") {
+        chirps = await getChirpsByAuthorId(authorId);
+    } else {
         res.status(400).json({ error: "authorId must be a single string" });
         return;
     }
 
-    const chirpsByAuthor = await getChirpsByAuthorId(authorId);
-    res.status(200).json(chirpsByAuthor);
+    if (sort === "desc") {
+        chirps = chirps.toReversed();
+    }
+
+    res.status(200).json(chirps);
 }
 
 export async function handlerGetChirpById(req: Request, res: Response){
