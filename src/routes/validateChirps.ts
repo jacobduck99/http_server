@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { BadRequest } from '../api/errors.js';
 import { createUserChirp, getAllChirps, getChirpById } from '../db/queries/chirps.js';
 import { NotFound } from '../api/errors.js';
-import { extractBearerToken, validateJWT } from '../auth/auth.js';
+import { extractBearerToken, validateJWT, getBearerToken } from '../auth/auth.js';
 import { config } from '../config.js';
 
 type ChirpParams = {
@@ -55,6 +55,15 @@ export async function handlerGetChirpById(req: Request, res: Response){
         throw new NotFound("chirp not found", 404);
     }
     res.status(200).json(chirpById);
+}
+
+export async function handlerDeleteChirpById(req: Request, res: Response){
+    const bearerToken = getBearerToken(req);
+    const secret = config.api.jwtToken;
+    const userId = validateJWT(bearerToken, secret);
+    const path = req.params;
+    const chirpId = path.chirpId;
+
 }
 
 

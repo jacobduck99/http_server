@@ -28,6 +28,7 @@ app.post('/api/login', handlerLoginUser);
 app.post('/api/refresh', handlerCheckToken); 
 app.post('/api/revoke', handlerRevokeRefreshToken);
 app.put('/api/users', handlerUpdateUserLogin);
+app.delete('/api/chirps/:chirpId', ) // put handler here
 app.use(errorHandler);
 
 app.listen(PORT, () => {
