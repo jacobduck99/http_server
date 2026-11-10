@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { BadRequest } from '../api/errors.js';
+import { BadRequest, NotFound, Forbidden } from '../api/errors.js';
 import { createUserChirp, getAllChirps, getChirpById } from '../db/queries/chirps.js';
 import { NotFound } from '../api/errors.js';
 import { extractBearerToken, validateJWT, getBearerToken } from '../auth/auth.js';
@@ -62,7 +62,18 @@ export async function handlerDeleteChirpById(req: Request, res: Response){
     const secret = config.api.jwtToken;
     const userId = validateJWT(bearerToken, secret);
     const path = req.params;
-    const chirpId = path.chirpId;
+    const { chirpId } = path;
+    const lookUpChirp = await getChirpById(chirpId);
+    if (lookUpChirp === undefined){
+        throw new NotFound("chirp not found", 404);
+    } else if (lookUpChirp.userId !== userId){
+        throw new Forbidden("user does not have access to this chirp", 403);
+    } else {
+        const deleteChirp = await deleteChirpById(userId, chirpId);
+        if (deleteChirp === undefined){
+            throw new NotFound("chirp not found", 404);
+        } res.status(204).end();
+    }
 
 }
 

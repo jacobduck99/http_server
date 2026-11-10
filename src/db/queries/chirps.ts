@@ -23,3 +23,14 @@ export async function getChirpById(id: string){
     .where(eq(chirps.id, id))
     return result;
 }
+
+export async function deleteChirpById(userId: string, chirpId: string){
+    await db 
+    .delete(chirps)
+    .where(and(
+    eq(chirps.userId, userId),
+    eq(chirps.id, chirpId),
+    )
+    )
+}
+
