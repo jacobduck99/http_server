@@ -70,9 +70,7 @@ export async function handlerDeleteChirpById(req: Request, res: Response){
         throw new Forbidden("user does not have access to this chirp", 403);
     } else {
         const deleteChirp = await deleteChirpById(userId, coerced);
-        if (deleteChirp === undefined){
-            throw new NotFound("chirp not found", 404);
-        } res.status(204).end();
+        res.status(204).end();
     }
 
 }
