@@ -65,10 +65,18 @@ export function getBearerToken(req: Request): string{
     return extractToken;
 };
 
-export function getAPIKey(req: Request){
+export function getAPIKey(req: Request): string {
     const header = req.get('Authorization');
-    const token = header.trim().split(" ");
-    return token;
+    if (typeof header !== "string") {
+        throw new Unauthorized("Unauthorized", 401);
+    }
+
+    const parts = header.trim().split(" ");
+    if (parts.length !== 2 || parts[0] !== "ApiKey" || parts[1] === "") {
+        throw new Unauthorized("Unauthorized", 401);
+    }
+
+    return parts[1];
 }
 
 
