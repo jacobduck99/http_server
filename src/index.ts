@@ -7,6 +7,7 @@ import { handlerChirp, handlerGetAllChirps, handlerGetChirpById, handlerDeleteCh
 import { handlerCreateUser, handlerDeleteAllUsers, handlerLoginUser, handlerUpdateUserLogin } from './routes/users.js';
 import { handlerCheckToken } from './routes/refresh.js';
 import { handlerRevokeRefreshToken } from './routes/revoke.js';
+import { handlerWebHooks } from './routes/webhooks.js';
 import { errorHandler } from './api/middlewareError.js'
 
 
@@ -28,6 +29,7 @@ app.post('/api/login', handlerLoginUser);
 app.post('/api/refresh', handlerCheckToken); 
 app.post('/api/revoke', handlerRevokeRefreshToken);
 app.put('/api/users', handlerUpdateUserLogin);
+app.post('/api/polka/webhooks', handlerWebHooks); 
 app.delete('/api/chirps/:chirpId', handlerDeleteChirpById);
 app.use(errorHandler);
 
