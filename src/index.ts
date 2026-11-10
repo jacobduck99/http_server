@@ -3,7 +3,7 @@ import { type Request, type Response, type NextFunction } from 'express';
 import { handlerReadiness } from './routes/readiness.js'
 import { handlerGetIncrement, handlerResetIncrement } from './routes/incrementResponse.js';
 import { middlewareLogResponses, middlewareMetricsInc } from './api/middleware.js'
-import { handlerChirp, handlerGetAllChirps, handlerGetChirpById } from './routes/validateChirps.js';
+import { handlerChirp, handlerGetAllChirps, handlerGetChirpById, handlerDeleteChirpById } from './routes/validateChirps.js';
 import { handlerCreateUser, handlerDeleteAllUsers, handlerLoginUser, handlerUpdateUserLogin } from './routes/users.js';
 import { handlerCheckToken } from './routes/refresh.js';
 import { handlerRevokeRefreshToken } from './routes/revoke.js';
@@ -28,7 +28,7 @@ app.post('/api/login', handlerLoginUser);
 app.post('/api/refresh', handlerCheckToken); 
 app.post('/api/revoke', handlerRevokeRefreshToken);
 app.put('/api/users', handlerUpdateUserLogin);
-app.delete('/api/chirps/:chirpId', ) // put handler here
+app.delete('/api/chirps/:chirpId', handlerDeleteChirpById);
 app.use(errorHandler);
 
 app.listen(PORT, () => {
