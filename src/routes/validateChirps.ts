@@ -62,13 +62,14 @@ export async function handlerDeleteChirpById(req: Request, res: Response){
     const userId = validateJWT(bearerToken, secret);
     const path = req.params;
     const { chirpId } = path;
-    const lookUpChirp = await getChirpById(chirpId);
+    let coerced = chirpId.toString();
+    const lookUpChirp = await getChirpById(coerced);
     if (lookUpChirp === undefined){
         throw new NotFound("chirp not found", 404);
     } else if (lookUpChirp.userId !== userId){
         throw new Forbidden("user does not have access to this chirp", 403);
     } else {
-        const deleteChirp = await deleteChirpById(userId, chirpId);
+        const deleteChirp = await deleteChirpById(userId, coerced);
         if (deleteChirp === undefined){
             throw new NotFound("chirp not found", 404);
         } res.status(204).end();
