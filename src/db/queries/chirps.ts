@@ -34,10 +34,10 @@ export async function deleteChirpById(userId: string, chirpId: string){
     )
 }
 
-export async function getChirpByAuthorId(authorId: string){
+export async function getChirpsByAuthorId(authorId: string){
     const result = await db
     .select().from(chirps)
-    .where(eq(chirps.id, authorId))
+    .where(eq(chirps.userId, authorId))
     return result
 }
 
