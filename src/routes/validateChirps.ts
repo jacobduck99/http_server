@@ -42,11 +42,20 @@ export async function handlerChirp(req: Request, res: Response){
 }
 
 export async function handlerGetAllChirps(req: Request, res: Response) {
-    const { authorId } = req.query;
+    const { authorId, sort } = req.query;
 
-    if (authorId === undefined) {
+    if (authorId === undefined || sort === undefined) {
         const allChirps = await getAllChirps();
         res.status(200).json(allChirps);
+        return;
+    }
+
+    if (sort === 'desc'){
+        const allChirps = await getAllChirps();
+        const reversed = allChirps.toReversed();
+        console.log("here's before reversed", allChirps);
+        console.log("reversed", reversed);
+        res.status(200).json(reversed);
         return;
     }
 
