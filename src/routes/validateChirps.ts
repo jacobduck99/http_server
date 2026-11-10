@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { BadRequest, NotFound, Forbidden } from '../api/errors.js';
-import { createUserChirp, getAllChirps, getChirpById, deleteChirpById } from '../db/queries/chirps.js';
+import { createUserChirp, getAllChirps, getChirpById, deleteChirpById, getChirpByAuthorId } from '../db/queries/chirps.js';
 import { extractBearerToken, validateJWT, getBearerToken } from '../auth/auth.js';
 import { config } from '../config.js';
 
@@ -41,16 +41,22 @@ export async function handlerChirp(req: Request, res: Response){
     res.status(201).json(userChirp);
 }
 
-export async function handlerGetAllChirps(req: Request, res: Response){
-    const query = req.query;
-    if (typeof query !== "string" || !query){
+export async function handlerGetAllChirps(req: Request, res: Response) {
+    const { authorId } = req.query;
 
+    if (authorId === undefined) {
         const allChirps = await getAllChirps();
         res.status(200).json(allChirps);
-    }  
-        const { authorId } = query;
-        
-    
+        return;
+    }
+
+    if (typeof authorId !== "string") {
+        res.status(400).json({ error: "authorId must be a single string" });
+        return;
+    }
+
+    const chirpsByAuthor = await getChirpsByAuthorId(authorId);
+    res.status(200).json(chirpsByAuthor);
 }
 
 export async function handlerGetChirpById(req: Request, res: Response){
