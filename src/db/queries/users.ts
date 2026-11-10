@@ -31,7 +31,7 @@ export async function updateUser(userId: string, email: string, hashedPassword: 
   return result;
 }
 
-export async function updateUserToChirpRed(userId: string){
+export async function updateUserToChirpyRed(userId: string){
     const [result] = await db
       .update(users)
       .set({ is_chirpy_red: true })
