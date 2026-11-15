@@ -10,8 +10,9 @@ Chirpy is a complete backend built without a framework that hides the details. I
 - **Authorization:** users can only delete their own chirps
 - **Database:** PostgreSQL with Drizzle ORM, type-safe queries and versioned migrations
 - **Webhooks:** a payment-provider webhook (Polka) secured with an API key that upgrades users to "Chirpy Red"
+- **Input validation:** request bodies are checked up front, so bad input gets a clear `400` instead of crashing as a `500`
 - **Middleware:** request metrics, response logging and centralized error handling
-- **Testing:** unit tests for the auth layer with Vitest
+- **Testing:** unit tests for password hashing, JWTs, auth headers and request validation with Vitest
 
 ## Installation
 
@@ -91,6 +92,22 @@ npm test
 | `GET` | `/admin/metrics` | File server hit count |
 | `POST` | `/admin/reset` | Reset the database (only when `PLATFORM="dev"`) |
 | `POST` | `/api/polka/webhooks` | Polka payment webhook (requires API key) |
+
+### Errors
+
+Errors are returned as JSON with a matching status code:
+
+```json
+{ "error": "email is required" }
+```
+
+| Status | When |
+|--------|------|
+| `400` | Missing or invalid input (e.g. no email/password, chirp over 140 characters) |
+| `401` | Missing, malformed or expired token, or wrong email/password |
+| `403` | Not allowed (e.g. deleting someone else's chirp) |
+| `404` | Resource not found |
+| `500` | Unexpected server error (details are logged, not sent to the client) |
 
 ### Example
 
