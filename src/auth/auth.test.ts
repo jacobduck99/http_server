@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll } from "vitest";
 import { makeJWT, validateJWT, hashPassword, checkPasswordHash, extractBearerToken } from "./auth.js";
-import { BadRequest } from '../api/errors.js';
+import { Unauthorized } from '../api/errors.js';
 
 describe("Password Hashing", () => {
     const password1 = "correctPassword123!";
@@ -70,19 +70,19 @@ describe("extractBearerToken", () => {
         expect(token).toBe("abc123");
     });
 
-    it("should throw BadRequest when the header is undefined", () => {
-        expect(() => extractBearerToken(undefined)).toThrow(BadRequest);
+    it("should throw Unauthorized when the header is undefined", () => {
+        expect(() => extractBearerToken(undefined)).toThrow(Unauthorized);
     });
 
-    it("should throw BadRequest when the header is empty", () => {
-        expect(() => extractBearerToken("")).toThrow(BadRequest);
+    it("should throw Unauthorized when the header is empty", () => {
+        expect(() => extractBearerToken("")).toThrow(Unauthorized);
     });
 
-    it("should throw BadRequest when the scheme isn't Bearer", () => {
-        expect(() => extractBearerToken("Basic abc123")).toThrow(BadRequest);
+    it("should throw Unauthorized when the scheme isn't Bearer", () => {
+        expect(() => extractBearerToken("Basic abc123")).toThrow(Unauthorized);
     });
 
-    it("should throw BadRequest when the token is missing", () => {
-        expect(() => extractBearerToken("Bearer")).toThrow(BadRequest);
+    it("should throw Unauthorized when the token is missing", () => {
+        expect(() => extractBearerToken("Bearer")).toThrow(Unauthorized);
     });
 });

@@ -4,14 +4,14 @@ import { config } from '../config.js';
 import { Forbidden, Unauthorized } from '../api/errors.js';
 import { hashPassword, checkPasswordHash, makeJWT, makeRefreshToken, extractBearerToken, validateJWT } from '../auth/auth.js';
 import { createUserRefreshToken } from '../db/queries/refreshTokens.js';
+import { parseEmailPassword } from '../api/validate.js';
 
 export async function handlerCreateUser(req: Request, res: Response){
-    const params = req.body;
-    const hashedPw = await hashPassword(params.password);
-
+    const { email, password } = parseEmailPassword(req.body);
+    const hashedPw = await hashPassword(password);
 
     const newUser = await createUser({
-        email: params.email,
+        email,
         hashedPassword: hashedPw,
     });
     const { hashedPassword, ...user } = newUser;
@@ -28,8 +28,7 @@ export async function handlerDeleteAllUsers(req: Request, res: Response){
 
 
 export async function handlerLoginUser(req: Request, res: Response){
-    const params = req.body;
-    const { email, password } = params;
+    const { email, password } = parseEmailPassword(req.body);
     const userEmail = await getUser(email);
     if (userEmail === undefined){
         throw new Unauthorized("incorrect email or password", 401);
@@ -54,13 +53,10 @@ export async function handlerLoginUser(req: Request, res: Response){
 
 export async function handlerUpdateUserLogin(req: Request, res: Response) {
       const header = req.get("Authorization");
-      const token = extractBearerToken(header);
-      if (token === undefined) {
-        throw new Unauthorized("access token malformed or missing", 401);
-      }
+      const token = extractBearerToken(header); // throws Unauthorized if missing/malformed
 
       const userId = validateJWT(token, config.api.jwtToken);
-      const { email, password } = req.body;
+      const { email, password } = parseEmailPassword(req.body);
       const hashedPw = await hashPassword(password);
 
       const user = await updateUser(userId, email, hashedPw);
